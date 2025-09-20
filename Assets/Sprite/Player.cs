@@ -47,6 +47,17 @@ public class Player : MonoBehaviour
         _rigid.linearVelocity = new Vector2(_inputDirection.x * _moveSpeed, _rigid.linearVelocity.y);
         _anim.SetBool("Walk", _inputDirection.x != 0.0f);
     }
+    private void _LookMoveDirec()
+    {
+        if (_inputDirection.x > 0.0f)
+        {
+            transform.eulerAngles = Vector3.zero;
+        }
+        else if (_inputDirection.x < 0.0f)
+        {
+            transform.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
+        }
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Floor")
