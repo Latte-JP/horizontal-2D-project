@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
         _Move();
         //Unity上にhpを表示する。敵に当たってhpが減ることの確認用
         Debug.Log(_hp);
+        _LookMoveDirec();
     }
     private void _Move()
     {
