@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using Unity.Burst.CompilerServices;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -85,10 +86,11 @@ public class Player : MonoBehaviour
         Color color = _spriteRenderer.color;
         for (int i = 0; i < _damageTime; i++)
         {
-
+            yield return new WaitForSeconds(_flashTime);
+            _spriteRenderer.color = new Color(color.r, color.g, color.b, 0f);
         }
-
-
+        _spriteRenderer.color = color;
+        gameObject.layer = LayerMask.NameToLayer("Default");
     }
         
 
