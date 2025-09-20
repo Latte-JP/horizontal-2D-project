@@ -12,16 +12,26 @@ public class Player : MonoBehaviour
     private float _jumpSpeed;
     [SerializeField, Header("体力")]
     private int _hp;
+    [SerializeField, Header("無敵時間")]
+    private float _damageTime;
+    [SerializeField, Header("点滅時間")]
+    private float _flashTime;
+
     private Vector2 _inputDirection;
     private Rigidbody2D _rigid;
     private Animator _anim;
     private bool _bJump;
+    // プレイヤーのスプライトレンダラー
+    private SpriteRenderer _spriteRenderer;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _rigid = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _bJump = false;
+        //スプライトレンダラーコンポーネントを取得
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -46,6 +56,9 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             _HitEnemy(collision.gameObject);
+            //プレイヤーのレイヤーを「PlayerDamage」に変更
+            gameObject.layer = LayerMask.NameToLayer("PlayerDamage");
+            StartCoroutine(_Damage());
         }
     }
 
@@ -67,6 +80,20 @@ public class Player : MonoBehaviour
             enemy.GetComponent<Enemy>().PlayerDamage(this);
         }
     }
+    IEnumerator _Damage()
+    {
+        Color color = _spriteRenderer.color;
+        for (int i = 0; i < _damageTime; i++)
+        {
+
+        }
+
+
+    }
+        
+
+
+
     private void _Dead()
     {
         if (_hp <= 0)
@@ -96,5 +123,6 @@ public class Player : MonoBehaviour
     {
         return _hp;
     }
+
 
 }
