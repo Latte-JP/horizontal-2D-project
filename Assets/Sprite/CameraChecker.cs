@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class CameraChecker : MonoBehaviour
 {
     // 列挙型（enum）の定義：オブジェクトの状態を表す
     private enum Mode
