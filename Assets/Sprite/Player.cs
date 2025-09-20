@@ -71,7 +71,6 @@ public class Player : MonoBehaviour
             _HitEnemy(collision.gameObject);
             //プレイヤーのレイヤーを「PlayerDamage」に変更
             gameObject.layer = LayerMask.NameToLayer("PlayerDamage");
-            StartCoroutine(_Damage());
         }
     }
 
@@ -91,6 +90,7 @@ public class Player : MonoBehaviour
         {
             //enemyオブジェクトのEnemyスクリプトの中のplayerDamageメソッドが呼び出されて、引数の中は自分（Playerクラス）が入っていてPlayerクラスのhpが呼び出され当たった敵の攻撃力分減る。
             enemy.GetComponent<Enemy>().PlayerDamage(this);
+            StartCoroutine(_Damage());
         }
     }
     IEnumerator _Damage()
