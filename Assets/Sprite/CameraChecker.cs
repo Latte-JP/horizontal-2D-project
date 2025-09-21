@@ -1,55 +1,70 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class CameraChecker : MonoBehaviour
 {
-    // 列挙型（enum）の定義：オブジェクトの状態を表す
     private enum Mode
     {
-        None,        // 初期状態（カメラに映っていない）
-        Render,     // カメラに映っている
-        RenderOut  // カメラに映っていたが、今は映っていない
+        None,
+        Render,
+        RenderOut,
     }
-    // 現在のオブジェクトの状態を格納するMode型の変数
+
     private Mode _mode;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Camera currentCamera;
+
+    // Start is called before the first frame update
     void Start()
     {
-        // 初期状態をNoneに設定
         _mode = Mode.None;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // オブジェクトの消滅処理をチェック
         _Dead();
     }
-    // OnWillRenderObjectメソッド：オブジェクトがカメラに描画される直前に呼ばれるUnityのイベントメソッド
+
+    void OnEnable()
+    {
+        RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
+    }
+
+    void OnDisable()
+    {
+        RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+    }
+
+    void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera)
+    {
+        currentCamera = camera;
+    }
+
     private void OnWillRenderObject()
     {
-        // 現在のカメラが「Main Camera」である場合にのみ処理を実行
-        if (Camera.current.name == "Main Camera")
+        if ((currentCamera == null) || (currentCamera.cullingMask & (1 << gameObject.layer)) == 0)
         {
-            // オブジェクトがメインカメラに映っている場合、モードをRenderに変更
+            return;
+        }
+
+        if (currentCamera.name == "Main Camera")
+        {
             _mode = Mode.Render;
         }
     }
-      // オブジェクトの消滅処理を行うメソッド
+
     private void _Dead()
     {
-        // モードがRenderOutの場合（カメラから外れた状態）
         if (_mode == Mode.RenderOut)
         {
-            // このゲームオブジェクトを消滅させる
             Destroy(gameObject);
         }
-        // モードがRenderの場合（カメラに映っている状態）
-        else if (_mode == Mode.Render)
+
+        if (_mode == Mode.Render)
         {
-            // 次のフレームでカメラから外れたかをチェックするため、モードをRenderOutに変更
             _mode = Mode.RenderOut;
         }
     }
-    
-
 }
