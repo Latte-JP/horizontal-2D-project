@@ -42,9 +42,12 @@ public class Player : MonoBehaviour
         //Unity上にhpを表示する。敵に当たってhpが減ることの確認用
         Debug.Log(_hp);
         _LookMoveDirec();
+        _HitFloor();
+        OnDrawGizmos();
     }
     private void _Move()
     {
+    //    if (_bJump) return;
         _rigid.linearVelocity = new Vector2(_inputDirection.x * _moveSpeed, _rigid.linearVelocity.y);
         _anim.SetBool("Walk", _inputDirection.x != 0.0f);
     }
@@ -61,11 +64,11 @@ public class Player : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Floor")
-        {
-            _bJump = false;
-            _anim.SetBool("Jump", _bJump);
-        }
+        //    if (collision.gameObject.tag == "Floor")
+        //    {
+        //        _bJump = false;
+        //        _anim.SetBool("Jump", _bJump);
+        //    }
         if (collision.gameObject.tag == "Enemy")
         {
             _HitEnemy(collision.gameObject);
@@ -73,6 +76,30 @@ public class Player : MonoBehaviour
             gameObject.layer = LayerMask.NameToLayer("PlayerDamage");
         }
     }
+        private void _HitFloor()
+    {
+        int layerMask = LayerMask.GetMask("Floor");
+        Vector2 collisionSize = GetComponent<BoxCollider2D>().size;
+        Vector2 boxSize = transform.lossyScale * collisionSize;　//ここを変更
+        Vector3 rayPos = transform.position - new Vector3(0.0f, boxSize.y / 2.0f);　//ここを変更
+        Vector3 raySize = new Vector3(boxSize.x - 0.1f, 0.1f);　//ここを変更
+        RaycastHit2D rayHit = Physics2D.BoxCast(rayPos, raySize, 0.0f, Vector2.zero, 0.0f, layerMask);
+        if (rayHit.transform == null)
+        {
+            _bJump = true;
+            _anim.SetBool("Jump", _bJump);
+            return;
+        }
+
+        //Debug.Log(rayHit.transform.tag);
+        if (rayHit.transform.tag == "Floor" && _bJump)
+        {
+            _bJump = false;
+            _anim.SetBool("Jump", _bJump);
+
+        }
+    }
+
 
     private void _HitEnemy(GameObject enemy)
     {
@@ -104,7 +131,7 @@ public class Player : MonoBehaviour
         _spriteRenderer.color = color;
         gameObject.layer = LayerMask.NameToLayer("Default");
     }
-        
+
 
 
 
@@ -124,8 +151,8 @@ public class Player : MonoBehaviour
     {
         if (!context.performed || _bJump) return;
         _rigid.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
-        _bJump = true;
-        _anim.SetBool("Jump", _bJump);
+        //    _bJump = true;
+        //    _anim.SetBool("Jump", _bJump);
     }
     public void Damage(int damage)
     {
@@ -137,6 +164,11 @@ public class Player : MonoBehaviour
     {
         return _hp;
     }
+    private void OnDrawGizmos() 
+{ 
+    Gizmos.color = Color.red; //描画するBoxCastの色
+    Gizmos.DrawCube(transform.position - new Vector3(0, transform.lossyScale.y / 0.74f), new Vector2(transform.lossyScale.x - 0.1f, 0.1f)); //これを使ってBoxCastを描画する(BoxCastの座標, BoxCastのサイズ)
+}
 
 
 }
