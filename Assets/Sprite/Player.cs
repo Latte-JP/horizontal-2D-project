@@ -43,7 +43,6 @@ public class Player : MonoBehaviour
         Debug.Log(_hp);
         _LookMoveDirec();
         _HitFloor();
-        OnDrawGizmos();
     }
     private void _Move()
     {
@@ -72,8 +71,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             _HitEnemy(collision.gameObject);
-            //プレイヤーのレイヤーを「PlayerDamage」に変更
-            gameObject.layer = LayerMask.NameToLayer("PlayerDamage");
+
         }
     }
         private void _HitFloor()
@@ -117,6 +115,7 @@ public class Player : MonoBehaviour
         {
             //enemyオブジェクトのEnemyスクリプトの中のplayerDamageメソッドが呼び出されて、引数の中は自分（Playerクラス）が入っていてPlayerクラスのhpが呼び出され当たった敵の攻撃力分減る。
             enemy.GetComponent<Enemy>().PlayerDamage(this);
+            gameObject.layer = LayerMask.NameToLayer("PlayerDamage");
             StartCoroutine(_Damage());
         }
     }
@@ -164,11 +163,7 @@ public class Player : MonoBehaviour
     {
         return _hp;
     }
-    private void OnDrawGizmos() 
-{ 
-    Gizmos.color = Color.red; //描画するBoxCastの色
-    Gizmos.DrawCube(transform.position - new Vector3(0, transform.lossyScale.y / 0.74f), new Vector2(transform.lossyScale.x - 0.1f, 0.1f)); //これを使ってBoxCastを描画する(BoxCastの座標, BoxCastのサイズ)
-}
+
 
 
 }
