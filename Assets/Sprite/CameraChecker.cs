@@ -57,7 +57,8 @@ public class CameraChecker : MonoBehaviour
 
     private void _Dead()
     {
-        if (_mode == Mode.RenderOut)
+        Vector3 cameraMinPos = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        if (_mode == Mode.RenderOut && transform.position.x < cameraMinPos.x)
         {
             Destroy(gameObject);
         }

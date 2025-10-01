@@ -61,17 +61,19 @@ public class Player : MonoBehaviour
             transform.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
         }
     }
+
+    [System.Obsolete]
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //    if (collision.gameObject.tag == "Floor")
-        //    {
-        //        _bJump = false;
-        //        _anim.SetBool("Jump", _bJump);
-        //    }
         if (collision.gameObject.tag == "Enemy")
         {
             _HitEnemy(collision.gameObject);
-
+        }
+        else if (collision.gameObject.tag == "Goal")
+        {
+            FindObjectOfType<MainManager>()._ShowGameClearUI();
+            enabled = false;
+            GetComponent<PlayerInput>().enabled = false;
         }
     }
         private void _HitFloor()

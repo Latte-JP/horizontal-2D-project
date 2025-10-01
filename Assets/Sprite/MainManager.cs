@@ -1,13 +1,16 @@
+using System;
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class MainManager : MonoBehaviour
 {
-    [SerializeField, Header("ゲームオーバー")]
+    [SerializeField, Header("ゲームオーバーUI")]
     private GameObject _gameOverUI;
+    [SerializeField, Header("ゲームクリアUI")]
+    private GameObject _gameClearUI;
     private GameObject _player;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [System.Obsolete]
+    [Obsolete]
     void Start()
     {
         _player = FindObjectOfType<Player>().gameObject;
@@ -16,11 +19,15 @@ public class NewMonoBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _ShowGameOver();
+        _ShowGameOverUI();
     }
-    private void _ShowGameOver()
+    private void _ShowGameOverUI()
     {
         if (_player != null) return;
         _gameOverUI.SetActive(true);
+    }
+    public void _ShowGameClearUI()
+    {
+        _gameClearUI.SetActive(true);
     }
 }
