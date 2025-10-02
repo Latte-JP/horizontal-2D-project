@@ -133,15 +133,23 @@ public class Player : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
-
-
-
     private void _Dead()
     {
         if (_hp <= 0)
         {
             Destroy(gameObject);
         }
+    }
+    private void OnBecameInvisible()
+    {
+        // 1. メインカメラを取得
+    Camera camera = Camera.main; 
+    // 2. カメラが存在し、かつカメラのY座標よりプレイヤーのY座標が下にあるか（落下しているか）を判定
+    if (camera.name == "Main Camera" && transform.position.y < camera.transform.position.y)
+    {
+        // 3. プレイヤーオブジェクトを破壊し、ゲームオーバー処理を起動
+        Destroy(gameObject);
+    }
     }
     public void _OnMove(InputAction.CallbackContext context)
     {
