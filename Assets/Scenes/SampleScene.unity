@@ -6222,7 +6222,19 @@ MonoBehaviour:
     m_ActionId: cb2aaa0c-88af-4332-b0e1-72bc709b17c2
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1718801128}
+        m_TargetAssemblyTypeName: MainManager, Assembly-CSharp
+        m_MethodName: OnRestart
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 0b769454-10ec-4de0-badb-8513b0ffbad7
     m_ActionName: 'UI/Restart[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
