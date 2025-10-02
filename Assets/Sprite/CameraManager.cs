@@ -77,6 +77,7 @@ public class CameraManager : MonoBehaviour
     }
         private void _FollowPlayer()
     {
+        if (_player == null) return;
         // プレイヤーのX座標を取得
         float x = _player.transform.position.x;
 

@@ -1,5 +1,8 @@
 using System;
+using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainManager : MonoBehaviour
 {
@@ -8,6 +11,7 @@ public class MainManager : MonoBehaviour
     [SerializeField, Header("ゲームクリアUI")]
     private GameObject _gameClearUI;
     private GameObject _player;
+    private bool _bShowUI;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [Obsolete]
@@ -25,9 +29,16 @@ public class MainManager : MonoBehaviour
     {
         if (_player != null) return;
         _gameOverUI.SetActive(true);
+        _bShowUI = true;
     }
     public void _ShowGameClearUI()
     {
         _gameClearUI.SetActive(true);
+        _bShowUI = true;
+    }
+    public void OnRestart(InputAction.CallbackContext context)
+    {
+        if (!_bShowUI || !context.performed) return;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
